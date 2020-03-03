@@ -1,0 +1,2 @@
+"# sudoku_python"  initgit add README.mdgit commit -m "first commit"git remote add origin https://github.com/daurelius/sudoku_python.gitgit push -u origin master
+"# sudoku_python"  initgit add README.mdgit commit -m "first commit"git remote add origin https://github.com/daurelius/sudoku_python.gitgit push -u origin master
