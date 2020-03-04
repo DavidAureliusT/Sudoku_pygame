@@ -1,5 +1,6 @@
 import pygame, sys
 from setting import *
+from buttonClass import *
 
 class App:
     def __init__(self):
@@ -10,16 +11,25 @@ class App:
         #tracking mouse position for selecting the box area
         self.selected = None
         self.mousePos = None
+        #making button
+        self.state = "playing"
+        self.playingButtons = []
+        self.menuButtons = []
+        self.endButtons = []
+        self.loadButtons()
 
     def run(self):
         while self.running:
-            self.events()
-            self.update()
-            self.draw()
+            if self.state == "playing":
+                self.playing_events()
+                self.playing_update()
+                self.playing_draw()
         pygame.quit()
         sys.exit()
-    
-    def events(self):
+
+##### PLAYING STATE FUNCTIONS #####
+
+    def playing_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
@@ -31,16 +41,24 @@ class App:
                 else:
                     print("not on board")
                     self.selected = None
-    
-    def update(self):
-        self.mousePos = pygame.mouse.get_pos()
 
-    def draw(self):
+    def playing_update(self):
+        self.mousePos = pygame.mouse.get_pos()
+        for button in self.playingButtons:
+            button.update(self.mousePos)
+
+    def playing_draw(self):
         self.window.fill(WHITE)
+
+        for button in self.playingButtons:
+            button.draw(self.window)
+
         if self.selected:
             self.drawSelection(self.window, self.selected)
         self.drawGrid(self.window)
         pygame.display.update()
+
+##### HELPER FUNCTIONS #####
 
     def drawGrid(self, window):
         pygame.draw.rect(window, BLACK, (gridPos[0], gridPos[1], WIDTH-150, HEIGHT-150), 2)
@@ -61,3 +79,6 @@ class App:
         if self.mousePos[0] > gridPos[0] + gridSize or self.mousePos[1] > gridPos[1]+gridSize:
             return False
         return ((self.mousePos[0]-gridPos[0])//cellSize, (self.mousePos[1]-gridPos[1])//cellSize)
+    
+    def loadButtons(self):
+        self.playingButtons.append(Button(20, 40, 100, 40))
